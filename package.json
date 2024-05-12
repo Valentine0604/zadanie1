@@ -1,0 +1,19 @@
+{
+  "name": "zadanie1",
+  "version": "1.0.0",
+  "description": "zadanie1 pawcho",
+  "main": "App.js",
+  "scripts": {
+    "test": "npm run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/valentine0604/zadanie1.git"
+  },
+  "author": "Ewelina",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/valentine0604/zadanie1/issues"
+  },
+  "homepage": "https://github.com/valentine0604/zadanie1#readme"
+}
