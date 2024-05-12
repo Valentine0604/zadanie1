@@ -29,3 +29,5 @@ docker history nazwa_obrazu:tag
 
 ![image](https://github.com/Valentine0604/zadanie1/assets/106283972/763e827c-00e1-466e-b900-48059a908936)
 
+Wynik docker scout<br>
+![image](https://github.com/Valentine0604/zadanie1/assets/106283972/f3f141a9-ceea-4876-8c72-0c8c0c7d9755)
