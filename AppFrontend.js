@@ -3,30 +3,34 @@ const os = require('os');
 
 const PORT = 3000;
 const authorName = "Ewelina Salata";
+
 const app = express();
 
-// Obsługa żądania GET na głównej ścieżce "/"
+// Obsługa plików statycznych
+app.use(express.static('public'));
+
+// Obsługa żądania HTTP
 app.get('/', (req, res) => {
     // Pobieranie informacji o adresie IP klienta
     const clientIP = req.ip;
-
+    
     // Pobieranie daty i godziny w strefie czasowej klienta
     const currentTime = new Date().toLocaleString('pl-PL', {timeZone: 'Europe/Warsaw'});
-
+    
     // Pobieranie daty i czasu uruchomienia serwera
     const serverStartTime = new Date().toLocaleString('pl-PL', {timeZone: 'Europe/Warsaw'});
-
+    
     // Pobieranie adresu serwera
     const serverAddress = os.hostname();
-
+    
     // Zapisywanie informacji w logach serwera
     console.log(`Serwer uruchomiony przez: ${authorName} na porcie: ${PORT}`);
     console.log(`Adres IP klienta: ${clientIP}`);
     console.log(`Data i godzina w strefie czasowej klienta: ${currentTime}`);
     console.log(`Data i godzina uruchomienia serwera: ${serverStartTime}`);
     console.log(`Adres serwera: ${serverAddress}`);
-
-    // Generowanie treści HTML
+    
+    // Tworzenie treści strony dla klienta
     const responseBody = `
         <html>
             <head>
@@ -47,12 +51,18 @@ app.get('/', (req, res) => {
             </body>
         </html>
     `;
-
+    
     // Wysłanie odpowiedzi do klienta
     res.send(responseBody);
 });
 
-// Nasłuchiwanie na określonym porcie
+// Obsługa błędów
+app.use((err, req, res, next) => {
+    console.error('Wystąpił błąd serwera:', err.message);
+    res.status(500).send('Wystąpił błąd serwera');
+});
+
+// Uruchomienie serwera
 app.listen(PORT, () => {
     // Wyświetlanie informacji o uruchomieniu serwera
     console.log(`Serwer uruchomiony na porcie ${PORT} przez ${authorName} o godzinie ${new Date().toLocaleString('pl-PL', {timeZone: 'Europe/Warsaw'})}`);
