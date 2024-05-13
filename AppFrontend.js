@@ -1,39 +1,59 @@
-import React from 'react';
+const express = require('express');
+const os = require('os');
 
-function App() {
-  const ver = process.env.REACT_APP_VERSION;
+const PORT = 3000;
+const authorName = "Ewelina Salata";
+const app = express();
 
-  // Pobieranie adresu IP klienta
-  const clientIP = window.location.hostname;
+// Obsługa żądania GET na głównej ścieżce "/"
+app.get('/', (req, res) => {
+    // Pobieranie informacji o adresie IP klienta
+    const clientIP = req.ip;
 
-  // Pobieranie daty i godziny w strefie czasowej klienta
-  const currentTime = new Date().toLocaleString('pl-PL', {timeZone: 'Europe/Warsaw'});
+    // Pobieranie daty i godziny w strefie czasowej klienta
+    const currentTime = new Date().toLocaleString('pl-PL', {timeZone: 'Europe/Warsaw'});
 
-  // Pobieranie daty i czasu uruchomienia serwera
-  const serverStartTime = new Date().toLocaleString('pl-PL', {timeZone: 'Europe/Warsaw'});
+    // Pobieranie daty i czasu uruchomienia serwera
+    const serverStartTime = new Date().toLocaleString('pl-PL', {timeZone: 'Europe/Warsaw'});
 
-  // Adres serwera
-  const serverAddress = window.location.origin;
+    // Pobieranie adresu serwera
+    const serverAddress = os.hostname();
 
-  //imię i nazwisko
-  const authorName = "Ewelina Salata";
+    // Zapisywanie informacji w logach serwera
+    console.log(`Serwer uruchomiony przez: ${authorName} na porcie: ${PORT}`);
+    console.log(`Adres IP klienta: ${clientIP}`);
+    console.log(`Data i godzina w strefie czasowej klienta: ${currentTime}`);
+    console.log(`Data i godzina uruchomienia serwera: ${serverStartTime}`);
+    console.log(`Adres serwera: ${serverAddress}`);
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <div>
-          {"Imię i nazwisko: " + authorName}
-          {"Adres IP klienta: " + clientIP}
-          <br />
-          {"Adres serwera: " + serverAddress}
-          <br />
-          {"Data i godzina w twojej strefie czasowej: " + currentTime}
-          <br />
-          {"Data i godzina uruchomienia serwera: " + serverStartTime}
-        </div>
-      </header>
-    </div>
-  );
-}
+    // Generowanie treści HTML
+    const responseBody = `
+        <html>
+            <head>
+                <title>Informacje o kliencie</title>
+            </head>
+            <body>
+                <h1>Informacje o kliencie</h1>
+                <p>Adres IP klienta: ${clientIP}</p>
+                <p>Data i godzina w twojej strefie czasowej: ${currentTime}</p>
+                
+                <h1>Informacje o serwerze</h1>
+                <ul>
+                  <li>Autor serwera: ${authorName}</li>
+                  <li>Port serwera: ${PORT}</li>
+                  <li>Data i godzina uruchomienia serwera: ${serverStartTime}</li>
+                  <li>Adres serwera: ${serverAddress}</li>
+                </ul>
+            </body>
+        </html>
+    `;
 
-export default App;
+    // Wysłanie odpowiedzi do klienta
+    res.send(responseBody);
+});
+
+// Nasłuchiwanie na określonym porcie
+app.listen(PORT, () => {
+    // Wyświetlanie informacji o uruchomieniu serwera
+    console.log(`Serwer uruchomiony na porcie ${PORT} przez ${authorName} o godzinie ${new Date().toLocaleString('pl-PL', {timeZone: 'Europe/Warsaw'})}`);
+});
