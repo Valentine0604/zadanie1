@@ -18,6 +18,9 @@ WORKDIR /home/node/app
 COPY --chown=node:node App.js ./App.js
 COPY --chown=node:node package.json ./package.json
 
+
+LABEL org.opencontainers.image.authors="Ewelina Sałata"
+
 # Instalacja zależności aplikacji
 RUN npm install 
 

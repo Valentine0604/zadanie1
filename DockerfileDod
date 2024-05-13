@@ -1,5 +1,5 @@
-# Stage 1: Budowanie aplikacji React
-FROM scratch AS build1
+# Stage 1: Instalacja zależności
+FROM node:latest AS build1
 
 # Dodanie systemu plików Alpine
 ADD alpine-minirootfs-3.19.1-aarch64.tar /
@@ -9,7 +9,7 @@ RUN apk update --no-cache && \
     apk upgrade --no-cache && \
     apk add --no-cache nodejs npm openssh-client git
 
-RUN mkdir -p /zadanie1
+RUN mkdir -p /pawcho6
 
 # Dodanie klucza prywatnego SSH jako secret
 RUN --mount=type=secret,id=ssh_key \
@@ -19,37 +19,24 @@ RUN --mount=type=secret,id=ssh_key \
     ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 # Pobranie repozytorium GitHub po dodaniu klucza SSH
-RUN git clone git@github.com:Valentine0604/zadanie1.git zadanie1
-
-# Tworzenie aplikacji React
-RUN npx create-react-app zadanie1_react
-
-RUN mv /zadanie1/AppFrontend.js /zadanie1_react/src/AppFrontend.js
+RUN git clone git@github.com:Valentine0604/zadanie1.git pawcho6
 
 # Ustawienie katalogu roboczego
-WORKDIR /zadanie1_react
+WORKDIR /pawcho6
 
-# Instalacja zależności i budowa aplikacji
-RUN npm install && \
-    npm run build
+# Instalacja zależności
+RUN npm install express
 
-# Stage 2: Tworzenie obrazu NGINX
-FROM nginx:latest
-ENV REACT_APP_VERSION=production.v1.0
+# Stage 2: Uruchomienie aplikacji
+FROM node:latest
 
-# Kopiowanie plików z aplikacji React do katalogu html NGINX
-COPY --from=build1 /zadanie1_react/build/. /var/www/html
-COPY --from=build1 /zadanie1/default.conf /etc/nginx/conf.d/default.conf
+WORKDIR /app
 
-LABEL org.opencontainers.image.authors="zadanie1@docker.org"
-LABEL org.opencontainers.image.version="$VERSION"
+# Kopiowanie plików do katalogu aplikacji Express
+COPY --from=build1 /pawcho6 /app
 
-# Eksponowanie portu 80
-EXPOSE 80
+# Eksponowanie portu 3000
+EXPOSE 3000
 
-# Konfiguracja Healthcheck
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD wget -qO- http://localhost:80/healthcheck || exit 1
-
-# Uruchomienie serwera NGINX
-CMD ["nginx", "-g", "daemon off;"]
+# Uruchomienie aplikacji
+CMD ["node", "AppFrontend.js"]
