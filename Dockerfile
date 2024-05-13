@@ -1,8 +1,5 @@
 # Etap 1: Budowanie aplikacji
-FROM scratch as builder
-
-# Dodanie zawartości systemu plików Alpine Linux jako bazowego obrazu
-ADD alpine-minirootfs-3.19.1-aarch64.tar /
+FROM alpine:latest as builder
 
 # Aktualizacja pakietów, instalacja Node.js i npm, czyszczenie cache
 RUN apk update && apk upgrade && apk add --no-cache nodejs=20.12.1-r0 npm=10.2.5-r0 && rm -rf /etc/apk/cache 

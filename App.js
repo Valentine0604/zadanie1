@@ -1,15 +1,13 @@
-const express = require('express');
+const http = require('http');
 const os = require('os');
 
 const PORT = 3000;
 const authorName = "Ewelina Salata";
 
-const app = express();
-
 // Obsługa żądania HTTP
-app.get('/', (req, res) => {
+const server = http.createServer((req, res) => {
     // Pobieranie informacji o adresie IP klienta
-    const clientIP = req.ip;
+    const clientIP = req.connection.remoteAddress;
     
     // Pobieranie daty i godziny w strefie czasowej klienta
     const currentTime = new Date().toLocaleString('pl-PL', {timeZone: 'Europe/Warsaw'});
@@ -50,17 +48,12 @@ app.get('/', (req, res) => {
     `;
     
     // Wysłanie odpowiedzi do klienta
-    res.send(responseBody);
-});
-
-// Obsługa błędów
-app.use((err, req, res, next) => {
-    console.error('Wystąpił błąd serwera:', err.message);
-    res.status(500).send('Wystąpił błąd serwera');
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.end(responseBody);
 });
 
 // Uruchomienie serwera
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     // Wyświetlanie informacji o uruchomieniu serwera
     console.log(`Serwer uruchomiony na porcie ${PORT} przez ${authorName} o godzinie ${new Date().toLocaleString('pl-PL', {timeZone: 'Europe/Warsaw'})}`);
 });

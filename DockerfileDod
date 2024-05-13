@@ -1,8 +1,5 @@
 # Stage 1: Instalacja zależności
-FROM node:latest AS build1
-
-# Dodanie systemu plików Alpine
-ADD alpine-minirootfs-3.19.1-aarch64.tar /
+FROM alpine:latest AS build1
 
 # Aktualizacja i instalacja pakietów
 RUN apk update --no-cache && \
