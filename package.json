@@ -2,15 +2,15 @@
   "name": "zadanie1",
   "version": "1.0.0",
   "description": "zadanie1 pawcho",
-  "main": "App.js",
+  "main": "index.js",
   "scripts": {
-    "test": "npm run"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/valentine0604/zadanie1.git"
   },
-  "author": "Ewelina",
+  "author": "ewelina",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/valentine0604/zadanie1/issues"

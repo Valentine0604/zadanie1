@@ -1,0 +1,46 @@
+# Stage 1: Budowanie aplikacji Node.js
+FROM scratch AS build1
+
+# Dodanie systemu plików Alpine
+ADD alpine-minirootfs-3.19.1-aarch64.tar /
+
+# Aktualizacja i instalacja pakietów
+RUN apk update --no-cache && \
+    apk upgrade --no-cache && \
+    apk add --no-cache nodejs npm openssh-client git
+
+RUN mkdir -p /zadanie1
+
+# Dodanie klucza prywatnego SSH jako secret
+RUN --mount=type=secret,id=ssh_key \
+    mkdir -p ~/.ssh && \
+    cp /run/secrets/ssh_key ~/.ssh/id_rsa && \
+    chmod 600 ~/.ssh/id_rsa && \
+    ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+# Pobranie repozytorium GitHub po dodaniu klucza SSH
+RUN git clone git@github.com:Valentine0604/zadanie1.git zadanie1
+
+# Ustawienie katalogu roboczego
+WORKDIR /zadanie1
+
+# Instalacja zależności
+RUN npm install
+
+# Stage 2: Tworzenie obrazu Node.js
+FROM node:latest
+
+# Kopiowanie plików z aplikacji Node.js
+COPY --from=build1 /zadanie1/. /app
+
+# Ustawienie katalogu roboczego
+WORKDIR /app
+
+# Instalacja zależności
+RUN npm install
+
+# Eksponowanie portu 3000 (lub innego, jeśli aplikacja Node.js nasłuchuje na innym porcie)
+EXPOSE 3000
+
+# Uruchomienie aplikacji Node.js
+CMD ["node", "App.js"]
