@@ -1,5 +1,6 @@
 <b>Efekt działania aplikacji<b><br><br>
-![image](https://github.com/Valentine0604/zadanie1/assets/106283972/4332c5c4-f60a-47d4-afe2-87bbb18f40cb)
+![image](https://github.com/Valentine0604/zadanie1/assets/106283972/3fa66d8b-e1a2-401b-ba24-3dbde5548847)
+![image](https://github.com/Valentine0604/zadanie1/assets/106283972/3afeb92e-0012-4d40-8baa-bc009054f8d3)
 
 Budowa obrazu kontenera z aplikacją, który będzie pracować na platformach linux/arm64 i linux amd/64
 ```
@@ -12,13 +13,14 @@ Budowa obrazu kontenera z aplikacją wykorzystująca sterownik docker-container
 ```
 docker buildx build --platform linux/amd64,linux/arm64 -t nazwa_obrazu:tag ścieżka_do_katalogu_z_Dockerfile
 ```
+![image](https://github.com/Valentine0604/zadanie1/assets/106283972/d3ea8006-27ae-46fa-b47f-ef54535a848f)
 
-Budowa obrazu kontenera wykorzystująca dane cache
+Budowa obrazu kontenera wykorzystującą dane cache
 ```
-docker buildx build --platform linux/amd64,linux/arm64 \
-  --cache-to=type=registry,ref=nazwa_rejestru/cache,mode=max \
-  --tag nazwa_rejestru/nazwa_obrazu:tag --push .
+docker buildx build --platform inux/amd64,linux/arm64 -t nazwa_obrazu:tag --push --cache-to=type=registry,ref=nazwa_registry/nazwaobrazu:tag,mode=max -f nazwa_dockerfile
 ```
+![image](https://github.com/Valentine0604/zadanie1/assets/106283972/13b6cb05-5216-426c-9df1-844b41fceef6)
+
 ```
-docker pull nazwa_obrazu --cache-from=type=registry,ref=nazwa_rejestru/cache 
+docker pull nazwa_obrazu --cache-from=type=registry,ref=nazwa_rejestru/folder_z_cache
 ```
