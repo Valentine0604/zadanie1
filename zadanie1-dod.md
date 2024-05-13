@@ -12,3 +12,13 @@ Budowa obrazu kontenera z aplikacją wykorzystująca sterownik docker-container
 ```
 docker buildx build --platform linux/amd64,linux/arm64 -t nazwa_obrazu:tag ścieżka_do_katalogu_z_Dockerfile
 ```
+
+Budowa obrazu kontenera wykorzystująca dane cache
+```
+docker buildx build --platform linux/amd64,linux/arm64 \
+  --cache-to=type=registry,ref=nazwa_rejestru/cache,mode=max \
+  --tag nazwa_rejestru/nazwa_obrazu:tag --push .
+```
+```
+docker pull nazwa_obrazu --cache-from=type=registry,ref=nazwa_rejestru/cache 
+```
